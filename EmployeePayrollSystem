@@ -1,0 +1,93 @@
+
+class Employee {
+    int id;
+    String name;
+    float basicSalary;
+    float bonus;
+    float netSalary;
+
+    // Constructor
+    public Employee(int id, String name, float basicSalary) {
+        this.id = id;
+        this.name = name;
+        this.basicSalary = basicSalary;
+    }
+
+    public void displayDetails() {
+        System.out.println("Employee Id: " + id);
+        System.out.println("Employee Name: " + name);
+        System.out.println("Basic Salary: " + basicSalary);
+        System.out.println("Bonus: " + bonus);
+        System.out.println("Net Salary: " + netSalary);
+    }
+}
+
+
+class PermanentEmployee extends Employee {
+    int pf;
+    public PermanentEmployee(int id, String name, float basicSalary, int pf) {
+        super(id, name, basicSalary);
+        this.pf = pf;
+        calculateBonus();
+        calculateNetSalary();
+    }
+
+
+    private void calculateBonus() {
+        if (pf < 1000) {
+            bonus = 0.1f * basicSalary; // 10%
+        } else if (pf >= 1000 && pf < 1500) {
+            bonus = 0.115f * basicSalary; // 11.5%
+        } else if (pf >= 1500 && pf < 1800) {
+            bonus = 0.12f * basicSalary; // 12%
+        } else {
+            bonus = 0.15f * basicSalary; // 15%
+        }
+    }
+
+    private void calculateNetSalary() {
+        netSalary = basicSalary - pf + bonus;
+    }
+}
+
+class TemporaryEmployee extends Employee {
+    int dailyWages;
+    int noOfDays;
+
+    public TemporaryEmployee(int id, String name, int dailyWages, int noOfDays) {
+        super(id, name, dailyWages * noOfDays); // Basic Salary is calculated as daily wages * days worked
+        this.dailyWages = dailyWages;
+        this.noOfDays = noOfDays;
+        calculateBonus();
+        calculateNetSalary();
+    }
+
+    private void calculateBonus() {
+        if (dailyWages < 1000) {
+            bonus = 0.15f * netSalary; // 15%
+        } else if (dailyWages >= 1000 && dailyWages < 1500) {
+            bonus = 0.12f * netSalary; // 12%
+        } else if (dailyWages >= 1500 && dailyWages < 1750) {
+            bonus = 0.11f * netSalary; // 11%
+        } else {
+            bonus = 0.08f * netSalary; // 8%
+        }
+    }
+    private void calculateNetSalary() {
+        netSalary = dailyWages * noOfDays + bonus;
+    }
+}
+public class EmployeePayrollSystem {
+    public static void main(String[] args) {
+        // Initialization for Permanent Employee
+        PermanentEmployee permEmp = new PermanentEmployee(101, "Esther", 25000, 1500);
+        System.out.println("Permanent Employee Details:");
+        permEmp.displayDetails();
+        System.out.println();
+
+        // Initialization for Temporary Employee
+        TemporaryEmployee tempEmp = new TemporaryEmployee(102, "Ganesh", 1500, 20);
+        System.out.println("Temporary Employee Details:");
+        tempEmp.displayDetails();
+    }
+}
